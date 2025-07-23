@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
+  role     String    @default("customer")
+  orders   Order[]
+  bookings Booking[]
+}
+
+model Table {
+  id        Int       @id @default(autoincrement())
+  tableNum  Int       @unique
+  status    String    @default("available")
+  capacity  Int
+  qrCodeUrl String
+  orders    Order[]
+  bookings  Booking[]
+}
+
+model Menu {
+  id          Int         @id @default(autoincrement())
+  name        String
+  price       Float
+  description String?
+  imageUrl    String?
+  available   Boolean     @default(true)
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  userId        Int
+  tableId       Int
+  totalPrice    Float
+  status        String      @default("pending")
+  paymentStatus String      @default("unpaid")
+  createdAt     DateTime    @default(now())
+  user          User        @relation(fields: [userId], references: [id])
+  table         Table       @relation(fields: [tableId], references: [id])
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id      Int     @id @default(autoincrement())
+  orderId Int
+  menuId  Int
+  qty     Int
+  notes   String?
+  order   Order   @relation(fields: [orderId], references: [id])
+  menu    Menu    @relation(fields: [menuId], references: [id])
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  tableId     Int
+  bookingTime DateTime
+  status      String   @default("booked")
+  user        User     @relation(fields: [userId], references: [id])
+  table       Table    @relation(fields: [tableId], references: [id])
+}
