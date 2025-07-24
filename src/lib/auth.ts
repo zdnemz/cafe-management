@@ -1,30 +1,28 @@
-import { NextAuthOptions } from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import GoogleProvider from "next-auth/providers/google";
-import { db } from "./db";
+"use server";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db),
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/auth/login",
-    newUser: "/auth/register",
-  },
-  callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
-  },
-};
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+
+export async function generateToken(userId: number) {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET tidak ditemukan di environment variables");
+  }
+
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+}
+
+export async function setAuthCookie(token: string) {
+  const cookieStore = await cookies();
+  cookieStore.set("auth-token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    path: "/",
+  });
+}
+
+export async function clearAuthCookie() {
+  const cookieStore = await cookies();
+  cookieStore.delete("auth-token");
+}

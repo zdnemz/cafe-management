@@ -10,16 +10,19 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String
-  email    String    @unique
-  role     String    @default("customer")
-  orders   Order[]
-  bookings Booking[]
+  id        String    @id @default(cuid()) // <- default cuid untuk fallback (bisa di override nanoid)
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("customer")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  orders    Order[]
+  bookings  Booking[]
 }
 
 model Table {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(cuid())
   tableNum  Int       @unique
   status    String    @default("available")
   capacity  Int
@@ -29,7 +32,7 @@ model Table {
 }
 
 model Menu {
-  id          Int         @id @default(autoincrement())
+  id          String      @id @default(cuid())
   name        String
   price       Float
   description String?
@@ -39,9 +42,9 @@ model Menu {
 }
 
 model Order {
-  id            Int         @id @default(autoincrement())
-  userId        Int
-  tableId       Int
+  id            String      @id @default(cuid())
+  userId        String
+  tableId       String
   totalPrice    Float
   status        String      @default("pending")
   paymentStatus String      @default("unpaid")
@@ -52,19 +55,19 @@ model Order {
 }
 
 model OrderItem {
-  id      Int     @id @default(autoincrement())
-  orderId Int
-  menuId  Int
+  id      String   @id @default(cuid())
+  orderId String
+  menuId  String
   qty     Int
   notes   String?
-  order   Order   @relation(fields: [orderId], references: [id])
-  menu    Menu    @relation(fields: [menuId], references: [id])
+  order   Order    @relation(fields: [orderId], references: [id])
+  menu    Menu     @relation(fields: [menuId], references: [id])
 }
 
 model Booking {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  tableId     Int
+  id          String   @id @default(cuid())
+  userId      String
+  tableId     String
   bookingTime DateTime
   status      String   @default("booked")
   user        User     @relation(fields: [userId], references: [id])
