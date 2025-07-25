@@ -6,20 +6,49 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useAuthStore } from "@/store/auth-store";
 
-const NAV_ITEMS = [
-  { href: "/menu", label: "Menu", authRequired: false },
-  { href: "/booking", label: "Booking", authRequired: false },
-  { href: "/orders", label: "Orders", authRequired: true },
-];
+const NAV_ITEMS = {
+  GUEST: [
+    { href: "/menu", label: "Menu" },
+    { href: "/booking", label: "Booking" },
+  ],
+  CUSTOMER: [
+    { href: "/menu", label: "Menu" },
+    { href: "/booking", label: "Booking" },
+    { href: "/orders", label: "Orders" },
+  ],
+  STAFF: [
+    { href: "/staff/tables", label: "Tables" },
+    { href: "/staff/orders", label: "Orders" },
+  ],
+  ADMIN: [
+    { href: "/admin/users", label: "Users" },
+    { href: "/admin/menus", label: "Menus" },
+    { href: "/admin/bookings", label: "Bookings" },
+    { href: "/admin/orders", label: "Orders" },
+  ],
+};
 
 export default function Navbar() {
   const { isAuthenticated, user } = useAuthStore();
 
+  const role = user?.role || "GUEST";
+
+  const navItems =
+    role === "ADMIN"
+      ? NAV_ITEMS.ADMIN
+      : role === "STAFF"
+        ? NAV_ITEMS.STAFF
+        : isAuthenticated
+          ? NAV_ITEMS.CUSTOMER
+          : NAV_ITEMS.GUEST;
+
   const authButton = !isAuthenticated
     ? { href: "/auth/login", label: "Login" }
-    : user?.role === "admin"
-      ? { href: "/dashboard", label: "Dashboard" }
-      : { href: "/profile", label: "Profile" };
+    : role === "ADMIN"
+      ? { href: "/admin/dashboard", label: "Dashboard" }
+      : role === "STAFF"
+        ? { href: "/staff/dashboard", label: "Dashboard" }
+        : { href: "/profile", label: "Profile" };
 
   return (
     <header
@@ -33,19 +62,16 @@ export default function Navbar() {
 
       <nav>
         <ul className="flex items-center gap-4 text-sm font-medium">
-          {NAV_ITEMS.map(
-            (item) =>
-              (!item.authRequired || isAuthenticated) && (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ),
-          )}
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="hover:text-primary transition-colors"
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
 

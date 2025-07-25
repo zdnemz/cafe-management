@@ -20,7 +20,7 @@ export default function Home() {
           </Button>
         ) : (
           <Button asChild>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/admin/dashboard">Dashboard</Link>
           </Button>
         )}
       </section>

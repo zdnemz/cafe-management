@@ -12,8 +12,8 @@ interface AuthState {
   isAuthenticated: boolean;
   isInitialized: boolean;
   loading: boolean;
-  setUser: (user: User | null) => void;
-  clearUser: () => void;
+  setUser: (user: User | null) => Promise<void>;
+  clearUser: () => Promise<void>;
   setInitialized: (value: boolean) => void;
   setLoading: (value: boolean) => void;
 }

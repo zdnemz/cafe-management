@@ -56,8 +56,6 @@ export async function login(
       role: user.role,
     };
 
-    revalidatePath("/dashboard");
-
     return {
       success: true,
       message: "Login berhasil",
@@ -158,7 +156,7 @@ export async function register(
         name: name.trim(),
         email: email.toLowerCase(),
         password: hashedPassword,
-        role: "customer",
+        role: "CUSTOMER",
       },
       select: {
         id: true,
@@ -171,7 +169,7 @@ export async function register(
     const token = await generateToken(newUser.id);
     await setAuthCookie(token);
 
-    revalidatePath("/dashboard");
+    revalidatePath("/admin/dashboard");
 
     return {
       success: true,

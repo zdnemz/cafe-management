@@ -60,7 +60,17 @@ export default withGuest(function () {
 
           toast.success("Login successfuly! Redirecting...");
 
-          router.push("/dashboard");
+          switch (res.user.role) {
+            case "ADMIN":
+              router.push("/admin/dashboard");
+              break;
+            case "STAFF":
+              router.push("/staff/dashboard");
+              break;
+            default:
+              router.push("/profile");
+              break;
+          }
         }
       } catch (error) {
         console.error("Login error:", error);

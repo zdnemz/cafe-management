@@ -2,6 +2,9 @@
 
 import { useRequireAuth, useRequireGuest } from "@/hooks/useAuth";
 import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ChevronLeftCircle } from "lucide-react";
 
 export const withAuth = <P extends object>(
   Component: React.ComponentType<P>,
@@ -18,9 +21,17 @@ export const withAuth = <P extends object>(
     if (roles && (!user?.role || !roles.includes(user.role))) {
       return (
         <div className="flex min-h-screen w-full items-center justify-center text-center">
-          <h1 className="text-2xl font-semibold">
-            You do not have permission to view this page.
-          </h1>
+          <div className="space-y-3">
+            <h1 className="text-xl font-semibold">
+              You do not have permission to view this page.
+            </h1>
+            <Button asChild>
+              <Link href="/">
+                <ChevronLeftCircle />
+                <span>Back to Home</span>
+              </Link>
+            </Button>
+          </div>
         </div>
       );
     }
