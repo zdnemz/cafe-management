@@ -56,6 +56,8 @@ export async function login(
       role: user.role,
     };
 
+    revalidatePath("/dashboard");
+
     return {
       success: true,
       message: "Login berhasil",
@@ -169,7 +171,7 @@ export async function register(
     const token = await generateToken(newUser.id);
     await setAuthCookie(token);
 
-    revalidatePath("/");
+    revalidatePath("/dashboard");
 
     return {
       success: true,

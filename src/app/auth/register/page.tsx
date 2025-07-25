@@ -55,8 +55,7 @@ export default function RegisterPage() {
           return;
         }
 
-        toast.success("Registration successful! Please login.");
-        router.push("/auth/login");
+        toast.success("Registration successful!");
       });
     } catch (error) {
       console.error("Login error:", error);

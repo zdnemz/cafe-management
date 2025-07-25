@@ -1,57 +1,49 @@
-import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { Twitter, Mail, Instagram, Facebook } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t bg-black/40">
+    <footer className="relative overflow-hidden border-t">
       {/* Main Content */}
       <div className="relative z-10 grid gap-6 py-12 md:grid-cols-3">
         {/* Brand */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">EduVerse</span>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl font-bold">CafeX</span>
           </div>
-          <p className="text-muted max-w-xs text-sm">
-            Learn, earn, and own your knowledge on the blockchain. The future of
-            education starts here.
+          <p className="text-muted-foreground max-w-xs text-sm">
+            Where great coffee meets good vibes. Specialty brews, cozy ambiance,
+            and bites worth savoring.
           </p>
         </div>
 
         {/* Navigation */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <h4 className="font-semibold">Quick Links</h4>
-          <ul className="text-muted space-y-1 text-sm">
-            <li className="hover:text-primary cursor-pointer transition-colors">
-              About Us
+          <ul className="text-muted-foreground space-y-1 text-sm">
+            <li>
+              <Link href="/about">About Us</Link>
             </li>
-            <li className="hover:text-primary cursor-pointer transition-colors">
-              How It Works
+            <li>
+              <Link href="/contact">Contact</Link>
             </li>
-            <li className="hover:text-primary cursor-pointer transition-colors">
-              FAQ
-            </li>
-            <li className="hover:text-primary cursor-pointer transition-colors">
-              Contact
+            <li>
+              <Link href="/faq">FAQ</Link>
             </li>
           </ul>
         </div>
 
         {/* Social Media */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <h4 className="font-semibold">Follow Us</h4>
           <div className="flex gap-3">
             {[
-              { icon: <Github size={18} />, link: "/" },
+              { icon: <Instagram size={18} />, link: "/" },
               { icon: <Twitter size={18} />, link: "/" },
-              { icon: <Linkedin size={18} />, link: "/" },
+              { icon: <Facebook size={18} />, link: "/" },
               { icon: <Mail size={18} />, link: "/" },
             ].map((social, i) => (
-              <Link
-                key={i}
-                href={social.link}
-                rel="noopener noreferrer"
-                className="bg-base-200 hover:bg-base-300 rounded-full p-2 transition-colors duration-200"
-              >
+              <Link key={i} href={social.link} rel="noopener noreferrer">
                 {social.icon}
               </Link>
             ))}
@@ -60,8 +52,10 @@ export default function Footer() {
       </div>
 
       {/* Bottom Note */}
-      <div className="text-muted border-t py-4 text-center text-xs">
-        {new Date().getFullYear()} EduVerse. All rights reserved.
+      <div className="text-muted-foreground border-t py-4 text-center text-xs">
+        <p>
+          {new Date().getFullYear()} {"\u00A9"} EduVerse. All rights reserved.
+        </p>
       </div>
     </footer>
   );

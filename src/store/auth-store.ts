@@ -25,15 +25,28 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: false,
 
   setUser: (user) =>
-    set({
-      user,
-      isAuthenticated: !!user,
+    new Promise<void>((resolve) => {
+      set({
+        user,
+        isAuthenticated: !!user,
+      });
+
+      // Resolve after state update
+      setTimeout(() => {
+        resolve();
+      }, 0);
     }),
 
   clearUser: () =>
-    set({
-      user: null,
-      isAuthenticated: false,
+    new Promise<void>((resolve) => {
+      set({
+        user: null,
+        isAuthenticated: false,
+      });
+
+      setTimeout(() => {
+        resolve();
+      }, 0);
     }),
 
   setInitialized: (value) => set({ isInitialized: value }),

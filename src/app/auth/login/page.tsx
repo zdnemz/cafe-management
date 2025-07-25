@@ -56,12 +56,12 @@ export default withGuest(function () {
         }
 
         if (res.user) {
-          setUser(res.user);
+          await setUser(res.user);
+
+          toast.success("Login successfuly! Redirecting...");
+
+          router.push("/dashboard");
         }
-
-        toast.success("Login successfuly! Redirecting...");
-
-        router.push("/dashboard");
       } catch (error) {
         console.error("Login error:", error);
         toast.error("Something went wrong, try again later!");
