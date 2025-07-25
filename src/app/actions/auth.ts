@@ -46,8 +46,8 @@ export async function login(
       return { success: false, message: "Email atau password salah" };
     }
 
-    const token = generateToken(user.id);
-    setAuthCookie(token);
+    const token = await generateToken(user.id);
+    await setAuthCookie(token);
 
     const userData = {
       id: user.id,
@@ -55,8 +55,6 @@ export async function login(
       email: user.email,
       role: user.role,
     };
-
-    revalidatePath("/");
 
     return {
       success: true,
@@ -83,7 +81,7 @@ export async function logout(): Promise<void> {
     console.error("Logout error:", error);
     throw new Error("Gagal logout");
   }
-  redirect("/login");
+  redirect("/");
 }
 
 // ======================
@@ -98,7 +96,7 @@ export async function getCurrentUser() {
     if (!process.env.JWT_SECRET) throw new Error("JWT_SECRET tidak ditemukan");
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
-      userId: number;
+      userId: string;
     };
 
     const user = await db.user.findUnique({
@@ -168,8 +166,8 @@ export async function register(
       },
     });
 
-    const token = generateToken(newUser.id);
-    setAuthCookie(token);
+    const token = await generateToken(newUser.id);
+    await setAuthCookie(token);
 
     revalidatePath("/");
 

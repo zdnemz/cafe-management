@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import AuthInitializer from "@/components/AuthInitializer";
 
 const roboto = Roboto({
   variable: "--font-roboto-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AuthInitializer />
           {children}
           <Toaster />
         </ThemeProvider>

@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
-export async function generateToken(userId: number) {
+export async function generateToken(userId: string) {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET tidak ditemukan di environment variables");
   }

@@ -24,7 +24,13 @@ export default function RootLayout({
           {header}
         </header>
       )}
-      <main className={cn("relative *:py-12", className, DEFAULT_PADDING)}>
+      <main
+        className={cn(
+          "relative min-h-screen w-full *:py-12 [&>:first-child]:pt-24 [&>:last-child]:pt-24",
+          className,
+          DEFAULT_PADDING,
+        )}
+      >
         {children}
       </main>
       {footer && <footer className={cn(DEFAULT_PADDING)}>{footer}</footer>}
